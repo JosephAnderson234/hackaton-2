@@ -6,10 +6,10 @@ import imgR from "@assets/mywallet.png";
 export default function LoginPage() {
 
 	return (
-		<main className="px-10 min-h-screen flex flex-col justify-center">
-			<section className="flex justify-center items-center py-8">
-				<Button message="Iniciar Sesión" to="/auth/login" />
-				<Button message="Registrarse" to="/auth/register" />
+		<main className="px-10 min-h-screen flex flex-col justify-center bg-gray-50">
+			<section className="flex justify-center items-center py-8 space-x-6">
+				<Button message="Iniciar Sesión" to="/auth/login" className="px-6 py-2 text-base font-medium" />
+				<Button message="Registrarse" to="/auth/register" className="px-6 py-2 text-base font-medium" />
 			</section>
 
 			<article className="flex justify-center items-center gap-12">
