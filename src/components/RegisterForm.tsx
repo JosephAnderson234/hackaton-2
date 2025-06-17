@@ -53,7 +53,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                     <path d="M50 54l4 4 8-8" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
             </div>
-            <h1 className="text-3xl font-extrabold mb-8 text-center text-green-800 drop-shadow-sm">Registrarse a BellidoMoney</h1>
+            <h1 className="text-3xl font-extrabold mb-8 text-center text-green-800 drop-shadow-sm">Registrarse a MyWallet</h1>
             <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
                 <div>
                     <label htmlFor="email" className="block mb-1 text-base font-semibold text-green-900">Email</label>

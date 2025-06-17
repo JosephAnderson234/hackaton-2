@@ -1,13 +1,6 @@
-import useAuth from "@hooks/useAuthContext";
+import Button from "@components/Button";
 
 const Navbar = () => {
-
-    const { logout, session, setIsLoggingOut} = useAuth();
-    const handleLogout = () => {
-        logout();
-        setIsLoggingOut(true);
-    };
-
     return (
         <nav className="bg-gray-800 p-4">
             <div className="container mx-auto flex justify-between items-center">
@@ -21,7 +14,19 @@ const Navbar = () => {
                         <circle cx="54" cy="54" r="12" fill="#38B48E"/>
                         <path d="M50 54l4 4 8-8" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span className="text-white text-lg font-bold">BellidoMoney</span>
+                    <span className="text-white text-lg font-bold">MyWallet</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Button
+                        message="Iniciar Sesión"
+                        to="/auth/login"
+                        className="px-3 py-1 text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
+                    />
+                    <Button
+                        message="Registrarse"
+                        to="/auth/register"
+                        className="px-3 py-1 text-sm font-medium bg-green-600 hover:bg-green-500 text-white rounded transition-colors"
+                    />
                 </div>
             </div>
         </nav>
