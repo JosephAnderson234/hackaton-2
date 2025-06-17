@@ -1,3 +1,5 @@
+// src/components/ExpenseDetail.tsx
+
 import { useEffect, useState } from 'react';
 import { getExpensesByCategory } from '../utils/api';
 import type { Expense } from '../types/expenseType';
@@ -25,7 +27,7 @@ export function ExpenseDetail({
         setLoading(true);
         const data = await getExpensesByCategory(token, year, month, categoryId);
         setExpenses(data);
-      } catch (err: any) {1
+      } catch (err: any) {
         setError(err.message || 'Error desconocido');
       } finally {
         setLoading(false);
@@ -44,15 +46,13 @@ export function ExpenseDetail({
 
   return (
     <div>
-      <h2>Detalle de Gastos</h2>
-      <p>
-        Total: <strong>S/ {total.toFixed(2)}</strong>
-      </p>
+      <h2>Gastos en {expenses[0]?.category.name || 'Categoría'} — {month}/{year}</h2>
+      <p>Total: <strong>S/ {total.toFixed(2)}</strong></p>
+
       <ul>
         {expenses.map((e) => (
           <li key={e.id} style={{ marginBottom: '8px' }}>
-            <strong>S/ {e.amount.toFixed(2)}</strong> — {e.description} (
-            {new Date(e.date).toLocaleDateString('es-PE')})
+            <strong>S/ {e.amount.toFixed(2)}</strong> — Fecha: {new Date(e.date).toLocaleDateString('es-PE')}
           </li>
         ))}
       </ul>
