@@ -17,16 +17,23 @@ export default function RegisterPage() {
 				<Button message="Registrarse" to="/auth/register" />
 			</section>
 
-			<article className="flex justify-between">
-				<section className="login-section flex flex-col items-center p-4 text-center">
-					<h1 className="title">¡Bienvenido!</h1>
-					<p>Regístrate para poder usar BellidoMoney!!!</p>
-					<img src={imgR} />
-				</section>
-					<RegisterForm
-						formData={formData}
-						setFormData={setFormData}
+			<article className="flex justify-center">
+				<section className="flex flex-col items-center justify-center p-10 rounded-2xl shadow-lg max-w-sm w-full bg-white">
+					<img
+						src={imgR}
+						alt="BellidoMoney Logo"
+						className="w-36 h-36 object-contain rounded-full border-4 border-green-500 shadow-lg mb-6 bg-white"
 					/>
+					<h1 className="text-4xl font-extrabold text-green-800 mb-3 tracking-tight">¡Bienvenido!</h1>
+					<p className="text-green-900 mb-2 text-center text-lg">
+						Regístrate para poder usar <span className="font-semibold">BellidoMoney</span>!
+					</p>
+				</section>
+				<div className="w-px bg-gray-200" />
+				<RegisterForm
+					formData={formData}
+					setFormData={setFormData}
+				/>
 			</article>
 		</main>
 	);
