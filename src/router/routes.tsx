@@ -4,13 +4,17 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import Dashboard from "@pages/Dashboard";
 import LoginPage from "@pages/LoginPage";
 import RegisterPage from "@pages/RegisterPage";
+import { Navigate } from "react-router-dom";
 
 export const router = createBrowserRouter(
     [{
         path: "/",
         element: <App />,
         children: [
-        
+            {
+                path:"",
+                element: <Navigate to="/dashboard"/>
+            },
             {
 				path: "auth",
 				children: [

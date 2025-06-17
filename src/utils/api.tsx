@@ -45,7 +45,7 @@ export async function getExpensesByCategory(
     month: number,
     categoryId: number
 ) {
-    const url = `http://198.211.105.95:8080/expenses/detail?year=${year}&month=${month}&categoryId=${categoryId}`;
+    const url = `${BACKEND_URL}/expenses/detail?year=${year}&month=${month}&categoryId=${categoryId}`;
 
     const response = await fetch(url, {
         headers: {
