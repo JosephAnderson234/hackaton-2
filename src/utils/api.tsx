@@ -44,19 +44,18 @@ export async function getExpensesByCategory(
     year: number,
     month: number,
     categoryId: number
-  ) {
+) {
     const url = `http://198.211.105.95:8080/expenses/detail?year=${year}&month=${month}&categoryId=${categoryId}`;
-  
+
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
-  
+
     if (!response.ok) {
-      throw new Error('No se pudo obtener el detalle de gastos');
+        throw new Error('No se pudo obtener el detalle de gastos');
     }
-  
+
     return response.json();
-  }
-  
+}
