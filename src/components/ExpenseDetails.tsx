@@ -25,7 +25,7 @@ export function ExpenseDetail({
         setLoading(true);
         const data = await getExpensesByCategory(token, year, month, categoryId);
         setExpenses(data);
-      } catch (err: any) {
+      } catch (err: any) {1
         setError(err.message || 'Error desconocido');
       } finally {
         setLoading(false);
