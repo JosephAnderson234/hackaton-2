@@ -1,16 +1,17 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import useAuth  from "@hooks/useAuthContext";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthProvider';
 
-export function ProtectedRoute({to}:{ to: string }) {
-	const authContext = useAuth();
-	const location = useLocation();
-
-	if (!authContext.session && authContext.isLoggingOut) {
-		return <Navigate to={to} replace />;
-	}
-
-	if (!authContext.session && !authContext.isLoggingOut)
-		return <Navigate to={`/auth/login?from=${location.pathname}`} replace />;
-
-	return <Outlet />;
+interface ProtectedRouteProps {
+    children: React.ReactNode;
 }
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+    const { isAuthenticated } = useAuth();
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <>{children}</>;
+};

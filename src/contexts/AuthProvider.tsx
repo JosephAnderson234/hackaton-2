@@ -1,48 +1,61 @@
-import { AuthContext } from "./contexts";
-import type { LoginRequest, RegisterRequest } from "@/types/authTypes";
-import { login, register } from "@utils/api";
-import { useUserStore } from "@utils/userStorage";
-import { useState } from "react";
-async function loginHandler(
-    loginRequest: LoginRequest,
-    setSession: (value: string) => void,
-) {
-    //esto realiza la llamada, desconmentar cuando se tenga el backend funcionando
-    //const response = await login(loginRequest);
-    //setSession(response.data.token);
-    setSession("mocked-token"); // Mocked token for testing purposes
+import React, { createContext, useContext, useEffect } from 'react';
+import { useAuthStore } from '../stores/appStore';
+import type { User } from '../types/authTypes';
+
+interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    login: (user: User, token: string) => void;
+    logout: () => void;
 }
 
-async function signupHandler(
-    signupRequest: RegisterRequest,
-    setSession: (value: string) => void,
-) {
-    const response = await register(signupRequest);
-    setSession(response.data.token);
-}
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AuthProvider = (props: { children: React.ReactNode }) => {
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const token = useUserStore((state) => state.token);
-    const setToken = useUserStore((state) => state.setToken);
-    
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { user, isAuthenticated, login, logout, token } = useAuthStore();
+
+    useEffect(() => {
+        // Check if token exists in localStorage on app start
+        const storedToken = localStorage.getItem('token');
+        if (storedToken && !token) {
+            // If there's a stored token but not in state, restore the auth state
+            // In a real app, you might want to validate the token with the backend
+            const storedUser = localStorage.getItem('auth-store');
+            if (storedUser) {
+                try {
+                    const parsed = JSON.parse(storedUser);
+                    if (parsed.state?.user) {
+                        login(parsed.state.user, storedToken);
+                    }
+                } catch (error) {
+                    console.error('Error parsing stored auth data:', error);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('auth-store');
+                }
+            }
+        }
+    }, [token, login]);
+
+    const contextValue: AuthContextType = {
+        user,
+        isAuthenticated,
+        login,
+        logout,
+    };
+
     return (
-        <AuthContext.Provider
-            value={{
-                register: (signupRequest) => signupHandler(signupRequest, setToken),
-                login: (loginRequest) => loginHandler(loginRequest, setToken),
-                logout: () => {
-                    setIsLoggingOut(true);
-                    setToken(null);
-                },
-                session: token,
-                isLoggingOut,
-                setIsLoggingOut,
-            }}
-        >
-            {props.children}
+        <AuthContext.Provider value={contextValue}>
+            {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
 
 export default AuthProvider;

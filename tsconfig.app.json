@@ -53,10 +53,15 @@
       ],
       "@hooks/*": [
         "src/hooks/*"
-      ],
-      "@utils/*": [
+      ],      "@utils/*": [
         "src/utils/*"
       ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
     }
   },
   "include": ["src"],
