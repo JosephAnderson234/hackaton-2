@@ -11,13 +11,13 @@ export default function RegisterPage() {
 	});
 
 	return (
-		<main className="px-10">
-			<section className="flex justify-center items-center py-4">
+		<main className="px-10 min-h-screen flex flex-col justify-center">
+			<section className="flex justify-center items-center py-8">
 				<Button message="Iniciar Sesión" to="/auth/login" />
 				<Button message="Registrarse" to="/auth/register" />
 			</section>
 
-			<article className="flex justify-center">
+			<article className="flex justify-center items-center gap-12">
 				<section className="flex flex-col items-center justify-center p-10 rounded-2xl shadow-lg max-w-sm w-full bg-white">
 					<img
 						src={imgR}
@@ -29,11 +29,12 @@ export default function RegisterPage() {
 						Regístrate para poder usar <span className="font-semibold">BellidoMoney</span>!
 					</p>
 				</section>
-				<div className="w-px bg-gray-200" />
-				<RegisterForm
-					formData={formData}
-					setFormData={setFormData}
-				/>
+				<div className="max-w-md w-full">
+					<RegisterForm
+						formData={formData}
+						setFormData={setFormData}
+					/>
+				</div>
 			</article>
 		</main>
 	);
