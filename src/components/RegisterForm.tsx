@@ -6,7 +6,6 @@ import  useAuth  from "@hooks/useAuthContext";
 interface RegisterFormProps {
     formData: RegisterRequest;
     setFormData: React.Dispatch<React.SetStateAction<RegisterRequest>>;
-    setVehicleRegister: (val: boolean) => void;
 }
 
 export default function RegisterForm(props: RegisterFormProps) {
