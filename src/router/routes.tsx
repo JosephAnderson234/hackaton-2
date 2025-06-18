@@ -30,7 +30,7 @@ export const router = createBrowserRouter(
 			},
             {
                 path: "dashboard",
-                element: <ProtectedRoute to="/"/>,
+                element: <ProtectedRoute/>,
                 children: [
                     {
                         path: "",
