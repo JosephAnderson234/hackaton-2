@@ -1,12 +1,13 @@
 import { type LoginRequest } from "@/types/authTypes";
 import { type ChangeEvent, type FormEvent, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import  useAuth from "@hooks/useAuthContext";
 
 export default function LoginForm() {
     const [formData, setFormData] = useState<LoginRequest>({
         email: "",
-        password: "",
+        passwd: "",
     });
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -70,9 +71,9 @@ export default function LoginForm() {
                     <label htmlFor="password" className="block mb-1 text-base font-semibold text-green-900">Password</label>
                     <input
                         type="password"
-                        name="password"
+                        name="passwd"
                         id="password"
-                        value={formData.password}
+                        value={formData.passwd}
                         onChange={handleChange}
                         className="w-full border border-green-300 rounded-xl px-4 py-3 text-base bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-400 transition-shadow shadow-inner"
                         placeholder="**********"

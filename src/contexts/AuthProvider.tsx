@@ -2,15 +2,14 @@ import { AuthContext } from "./contexts";
 import type { LoginRequest, RegisterRequest } from "@/types/authTypes";
 import { login, register } from "@utils/api";
 import { useUserStore } from "@utils/userStorage";
-import { useState } from "react";
 async function loginHandler(
     loginRequest: LoginRequest,
     setSession: (value: string) => void,
 ) {
-    //esto realiza la llamada, desconmentar cuando se tenga el backend funcionando
-    //const response = await login(loginRequest);
-    //setSession(response.data.token);
-    setSession("mocked-token"); // Mocked token for testing purposes
+    const response = await login(loginRequest)
+    setSession(response.data.result.token);
+    /* const response = await login(loginRequest);
+    setSession(response.data.token); */
 }
 
 async function signupHandler(
@@ -22,7 +21,6 @@ async function signupHandler(
 }
 
 const AuthProvider = (props: { children: React.ReactNode }) => {
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const token = useUserStore((state) => state.token);
     const setToken = useUserStore((state) => state.setToken);
     
@@ -32,12 +30,9 @@ const AuthProvider = (props: { children: React.ReactNode }) => {
                 register: (signupRequest) => signupHandler(signupRequest, setToken),
                 login: (loginRequest) => loginHandler(loginRequest, setToken),
                 logout: () => {
-                    setIsLoggingOut(true);
                     setToken(null);
                 },
-                session: token,
-                isLoggingOut,
-                setIsLoggingOut,
+                session: token
             }}
         >
             {props.children}

@@ -1,4 +1,4 @@
-import GastosList from "../components/GastosList";
+import GastosList from "@components/GastosList";
 
 export default function Dashboard() {
   return (
