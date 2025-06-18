@@ -1,57 +1,22 @@
-// src/components/ExpenseDetail.tsx
-import { useEffect, useState } from 'react';
-import { getExpensesByCategory } from '@utils/api';
-import type { Expense } from '@/types/expenseType';
-import { useExpenseParams } from '@hooks/useDetailedExpenses';
+import { useExpenseParams } from "@hooks/useExpenses";
+import ExpenseList from "@components/ExpenseDetails/ExpenseList";
+import ExpenseSummary from "@components/ExpenseDetails/ExpenseSummary";
 
-export function ExpenseDetail() {
-  const { year, month, categoryId, token, isValid } = useExpenseParams();
+export default function ExpenseDetail() {
+  const { year, month, expenses, loading, error, categoryName } = useExpenseParams();
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchExpenses = async () => {
-      if (!isValid) {
-        setError('Parámetros inválidos o token ausente');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const data = await getExpensesByCategory(token!, year, month, categoryId);
-        setExpenses(data);
-      } catch (err: any) {
-        setError(err.message || 'Error desconocido');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExpenses();
-  }, [year, month, categoryId, token, isValid]);
-
-  if (loading) return <p>Cargando gastos...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p className="text-gray-600">Cargando gastos...</p>;
+  if (error) return <p className="text-red-600 font-medium">Error: {error}</p>;
   if (expenses.length === 0)
-    return <p>No hay gastos registrados para esta categoría en este mes.</p>;
-
-  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+    return <p className="text-gray-500">No hay gastos registrados para esta categoría en este mes.</p>;
 
   return (
-    <div>
-      <h2>Gastos en {expenses[0]?.category.name || 'Categoría'} — {month}/{year}</h2>
-      <p>Total: <strong>S/ {total.toFixed(2)}</strong></p>
-
-      <ul>
-        {expenses.map((e) => (
-          <li key={e.id} style={{ marginBottom: '8px' }}>
-            <strong>S/ {e.amount.toFixed(2)}</strong> — Fecha: {new Date(e.date).toLocaleDateString('es-PE')}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section className="space-y-4 p-4 bg-white shadow rounded-lg">
+      <h2 className="text-xl font-bold text-gray-800">
+        Gastos en {categoryName} — {month}/{year}
+      </h2>
+      <ExpenseSummary expenses={expenses} />
+      <ExpenseList expenses={expenses} />
+    </section>
   );
 }
