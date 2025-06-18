@@ -6,7 +6,7 @@ export interface ExpenseCategory {
 
 export interface ExpenseSummary {
     categoryId: number;
-    categoryName?: string; // Made optional since backend might not provide it
+    categoryName: string;
     totalAmount: number;
     count: number;
 }
@@ -27,23 +27,11 @@ export interface CreateExpenseRequest {
     categoryId: number;
 }
 
-export interface Goal {
-    id: number;
-    month: number;
-    year: number;
-    targetAmount: number;
-    currentAmount?: number;
-    description?: string;
+export interface CreateExpenseWithCategoryRequest {
+    description: string;
+    amount: number;
+    date: string;
+    category: ExpenseCategory;
 }
 
-export interface CreateGoalRequest {
-    month: number;
-    year: number;
-    targetAmount: number;
-    description?: string;
-}
 
-export interface UpdateGoalRequest {
-    targetAmount?: number;
-    description?: string;
-}

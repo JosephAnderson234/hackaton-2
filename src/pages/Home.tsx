@@ -1,18 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "@hooks/useAuthContext";
 import type { LoginRequest } from '@/types/authTypes';
-
 const Home = () => {
-
     const {login} = useAuth(); // Assuming useAuth provides login management, though not used here
-
     const navigate = useNavigate();
-
     const simulateLogin = ()=>{
-        // Simulate a login action
         const tryLogin: LoginRequest = {
             email: "a@test.com",
-            password: "anfjkbgkjb"
+            passwd: "anfjkbgkjb"
         }
         login(tryLogin); // This would typically set a token in local storage or context
         console.log('User logged in');
@@ -28,6 +23,4 @@ const Home = () => {
         </div>
     );
 }
-
-
 export default Home;

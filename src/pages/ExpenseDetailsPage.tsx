@@ -5,42 +5,36 @@ import { getExpenseDetails, deleteExpense } from '../utils/api';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { AddExpenseModal } from '../components/AddExpenseModal';
 import type { ExpenseDetail } from '../types/expenseTypes';
-
-export const ExpenseDetailsPage: React.FC = () => {
-    const { categoryId } = useParams<{ categoryId: string }>();
+export const ExpenseDetailsPage: React.FC = () => {    const { categoryId } = useParams<{ categoryId: string }>();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    
     const year = parseInt(searchParams.get('year') || new Date().getFullYear().toString());
     const month = parseInt(searchParams.get('month') || (new Date().getMonth() + 1).toString());
-    
+    const parsedCategoryId = categoryId ? parseInt(categoryId) : null;
+    const isValidCategoryId = parsedCategoryId && !isNaN(parsedCategoryId);
     const { details, categories, removeExpense } = useExpenseStore();
-    const detailsKey = `${year}-${month}-${categoryId}`;
-    
+    const detailsKey = `${year}-${month}-${parsedCategoryId}`;
     const [expenses, setExpenses] = useState<ExpenseDetail[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
     const [deletingId, setDeletingId] = useState<number | null>(null);
-
-    const category = categories.find(cat => cat.id === parseInt(categoryId || '0'));
-    
-    const loadExpenseDetails = async () => {
-        if (!categoryId) return;
-        
+    const category = categories.find(cat => cat.id === parsedCategoryId);
+      const loadExpenseDetails = async () => {
+        if (!isValidCategoryId) {
+            setError('ID de categoría inválido');
+            return;
+        }
         setLoading(true);
         setError('');
-        
         try {
-            // Check if we already have the data
             const cachedExpenses = details[detailsKey];
             if (cachedExpenses) {
                 setExpenses(cachedExpenses);
                 setLoading(false);
                 return;
             }
-            
-            const expenseData = await getExpenseDetails(year, month, parseInt(categoryId));
+            const expenseData = await getExpenseDetails(year, month, parsedCategoryId!);
             setExpenses(expenseData);
         } catch (err: any) {
             setError('Error al cargar los detalles de gastos. Intenta nuevamente.');
@@ -48,19 +42,14 @@ export const ExpenseDetailsPage: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
+    };    useEffect(() => {
         loadExpenseDetails();
-    }, [categoryId, year, month, details]);
-
+    }, [parsedCategoryId, year, month, details]);
     const handleDeleteExpense = async (expenseId: number) => {
         if (!confirm('¿Estás seguro de que quieres eliminar este gasto?')) {
             return;
         }
-        
         setDeletingId(expenseId);
-        
         try {
             await deleteExpense(expenseId);
             removeExpense(expenseId);
@@ -72,18 +61,53 @@ export const ExpenseDetailsPage: React.FC = () => {
             setDeletingId(null);
         }
     };
-
     const totalAmount = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const averageAmount = expenses.length > 0 ? totalAmount / expenses.length : 0;
-
-    const monthNames = [
+    const averageAmount = expenses.length > 0 ? totalAmount / expenses.length : 0;    const monthNames = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
-
+    if (!isValidCategoryId) {
+        return (
+            <div className="space-y-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center space-x-4">
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">Error</h1>
+                            <p className="text-gray-600">ID de categoría inválido</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex">
+                        <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div className="ml-3">
+                            <p className="text-sm text-red-700">
+                                El ID de categoría proporcionado no es válido. Regresa al dashboard y selecciona una categoría válida.
+                            </p>
+                            <button
+                                onClick={() => navigate('/dashboard')}
+                                className="mt-2 text-sm text-red-600 hover:text-red-500 font-medium"
+                            >
+                                Volver al Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="space-y-6">
-            {/* Header */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -115,8 +139,6 @@ export const ExpenseDetailsPage: React.FC = () => {
                     </button>
                 </div>
             </div>
-
-            {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div className="text-center">
@@ -141,8 +163,6 @@ export const ExpenseDetailsPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Error Message */}
             {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex">
@@ -161,11 +181,7 @@ export const ExpenseDetailsPage: React.FC = () => {
                     </div>
                 </div>
             )}
-
-            {/* Loading State */}
             {loading && <LoadingSpinner />}
-
-            {/* Expense List */}
             {!loading && expenses.length > 0 && (
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div className="px-6 py-4 border-b border-gray-200">
@@ -174,15 +190,18 @@ export const ExpenseDetailsPage: React.FC = () => {
                     <div className="divide-y divide-gray-200">
                         {expenses.map((expense) => (
                             <div key={expense.id} className="px-6 py-4 hover:bg-gray-50">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex-1">
+                                <div className="flex items-center justify-between">                                <div className="flex-1">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-sm font-medium text-gray-900">
-                                                {expense.description}
-                                            </h3>
-                                            <div className="flex items-center space-x-4">
+                                            <div>
+                                                <h3 className="text-sm font-medium text-gray-900">
+                                                    {expense.description}
+                                                </h3>
+                                                <p className="text-xs text-indigo-600 font-medium mt-1">
+                                                    {category?.name || 'Categoría desconocida'}
+                                                </p>
+                                            </div><div className="flex items-center space-x-4">
                                                 <span className="text-sm font-semibold text-gray-900">
-                                                    S/ {expense.amount.toLocaleString('es-PE', { 
+                                                    S/ {(expense.amount || 0).toLocaleString('es-PE', { 
                                                         minimumFractionDigits: 2, 
                                                         maximumFractionDigits: 2 
                                                     })}
@@ -217,8 +236,6 @@ export const ExpenseDetailsPage: React.FC = () => {
                     </div>
                 </div>
             )}
-
-            {/* Empty State */}
             {!loading && expenses.length === 0 && !error && (
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,13 +251,12 @@ export const ExpenseDetailsPage: React.FC = () => {
                     </button>
                 </div>
             )}
-
-            {/* Add Expense Modal */}
-            {showAddModal && (
+            {showAddModal && isValidCategoryId && (
                 <AddExpenseModal
                     isOpen={showAddModal}
                     onClose={() => setShowAddModal(false)}
-                    categoryId={parseInt(categoryId || '0')}                    onExpenseAdded={(expense: ExpenseDetail) => {
+                    categoryId={parsedCategoryId!}
+                    onExpenseAdded={(expense: ExpenseDetail) => {
                         setExpenses(prev => [expense, ...prev]);
                         setShowAddModal(false);
                     }}

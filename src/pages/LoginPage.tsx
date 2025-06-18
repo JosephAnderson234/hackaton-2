@@ -3,22 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthProvider';
 import { login as apiLogin, register as apiRegister } from '../utils/api';
 import type { LoginRequest, RegisterRequest } from '../types/authTypes';
-
 export const LoginPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [passwd, setPasswd] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    
     const { login } = useAuth();
     const navigate = useNavigate();
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
-
         if (passwd.length < 12) {
             setError('La contraseña debe tener al menos 12 caracteres');
             setLoading(false);
@@ -28,14 +24,9 @@ export const LoginPage: React.FC = () => {
                 const loginRequest: LoginRequest = { email, passwd };
                 console.log('Attempting login with:', { email, passwdLength: passwd.length });
                 const response = await apiLogin(loginRequest);
-                
                 console.log('Login response received:', response);
-                
-                // Extract token and email from the actual response structure
                 let token: string | undefined;
                 let userEmail: string | undefined;
-                
-                // Check the actual backend response structure: response.result.token
                 if (response?.result?.token) {
                     console.log('Found token in response.result.token');
                     token = response.result.token;
@@ -49,10 +40,8 @@ export const LoginPage: React.FC = () => {
                     token = response.token;
                     userEmail = response.email || email;
                 }
-                
                 console.log('Final extracted token:', token ? '[TOKEN_FOUND]' : 'NO_TOKEN');
                 console.log('Final extracted email:', userEmail);
-                
                 if (token) {
                     console.log('Login successful, storing user data');
                     login({ email: userEmail || email, token }, token);
@@ -70,10 +59,7 @@ export const LoginPage: React.FC = () => {
                 setIsLogin(true);
             }        } catch (err: any) {
             console.error('Authentication error:', err);
-            
             let errorMessage = 'Error en la autenticación';
-            
-            // Handle specific error types
             if (err.code === 'ECONNABORTED') {
                 errorMessage = 'La conexión ha tardado demasiado. Verifica tu conexión a internet e intenta nuevamente.';
             } else if (err.code === 'ERR_NETWORK') {
@@ -89,13 +75,11 @@ export const LoginPage: React.FC = () => {
             } else if (err.message) {
                 errorMessage = err.message;
             }
-            
             setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
@@ -103,7 +87,6 @@ export const LoginPage: React.FC = () => {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Ahorrista</h1>
                     <p className="text-gray-600">Tu compañero financiero personal</p>
                 </div>
-
                 <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
                     <button
                         className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
@@ -126,7 +109,6 @@ export const LoginPage: React.FC = () => {
                         Registrarse
                     </button>
                 </div>
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -142,7 +124,6 @@ export const LoginPage: React.FC = () => {
                             placeholder="tu@email.com"
                         />
                     </div>
-
                     <div>
                         <label htmlFor="passwd" className="block text-sm font-medium text-gray-700 mb-2">
                             Contraseña
@@ -160,7 +141,6 @@ export const LoginPage: React.FC = () => {
                             La contraseña debe tener al menos 12 caracteres
                         </p>
                     </div>
-
                     {error && (
                         <div className={`p-3 rounded-md text-sm ${
                             error.includes('exitoso') 
@@ -170,7 +150,6 @@ export const LoginPage: React.FC = () => {
                             {error}
                         </div>
                     )}
-
                     <button
                         type="submit"
                         disabled={loading}
@@ -179,7 +158,6 @@ export const LoginPage: React.FC = () => {
                         {loading ? 'Procesando...' : (isLogin ? 'Iniciar Sesión' : 'Registrarse')}
                     </button>
                 </form>
-
                 {!isLogin && (
                     <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
                         <p className="text-sm text-blue-700">

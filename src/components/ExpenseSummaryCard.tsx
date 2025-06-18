@@ -2,24 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useExpenseStore } from '../stores/appStore';
 import type { ExpenseSummary } from '../types/expenseTypes';
-
 interface ExpenseSummaryCardProps {
     summary: ExpenseSummary;
     onClick?: () => void;
 }
-
 export const ExpenseSummaryCard: React.FC<ExpenseSummaryCardProps> = ({ 
     summary,
     onClick 
 }) => {
     const navigate = useNavigate();
-    const { currentYear, currentMonth, categories } = useExpenseStore();
-    
-    // Get category name from categories store if not present in summary
-    const categoryName = summary.categoryName || 
-        categories.find(cat => cat.id === summary.categoryId)?.name || 
-        'Categoría sin nombre';
-
+    const { currentYear, currentMonth } = useExpenseStore();
     const handleClick = () => {
         if (onClick) {
             onClick();
@@ -27,16 +19,13 @@ export const ExpenseSummaryCard: React.FC<ExpenseSummaryCardProps> = ({
         navigate(`/expenses/${summary.categoryId}?year=${currentYear}&month=${currentMonth}`);
     };const getCategoryIcon = (categoryName?: string) => {
         if (!categoryName) {
-            // Default icon for unknown categories
             return (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
             );
         }
-        
         const name = categoryName.toLowerCase();
-        
         if (name.includes('comida') || name.includes('alimentacion') || name.includes('restaurante')) {
             return (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,46 +63,37 @@ export const ExpenseSummaryCard: React.FC<ExpenseSummaryCardProps> = ({
                 </svg>
             );
         }
-    };
-
-    const averageAmount = summary.count > 0 ? summary.totalAmount / summary.count : 0;
-
+    };    // Ensure we have valid numbers
+    const totalAmount = summary.totalAmount || 0;
     return (
         <div
             onClick={handleClick}
-            className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-indigo-300"
+            className="bg-white border border-gray-200 rounded-lg p-4 transition-shadow hover:shadow-md cursor-pointer hover:border-indigo-300"
         >
-            <div className="flex items-start justify-between">                <div className="flex items-center">
+            <div className="flex items-start justify-between">
+                <div className="flex items-center">
                     <div className="p-2 bg-indigo-100 rounded-lg">
                         <div className="text-indigo-600">
-                            {getCategoryIcon(categoryName)}
+                            {getCategoryIcon(summary.categoryName)}
                         </div>
-                    </div>
-                    <div className="ml-3">
+                    </div>                    <div className="ml-3">
                         <h3 className="text-sm font-medium text-gray-900 line-clamp-1">
-                            {categoryName}
+                            {summary.categoryName}
                         </h3>
                         <p className="text-xs text-gray-500 mt-1">
-                            {summary.count} transacción{summary.count !== 1 ? 'es' : ''}
+                            Total gastado
                         </p>
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">
-                        S/ {summary.totalAmount.toLocaleString('es-PE', { 
-                            minimumFractionDigits: 2, 
-                            maximumFractionDigits: 2 
-                        })}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                        Prom: S/ {averageAmount.toLocaleString('es-PE', { 
+                    <p className="text-lg font-bold text-gray-900">
+                        S/ {totalAmount.toLocaleString('es-PE', { 
                             minimumFractionDigits: 2, 
                             maximumFractionDigits: 2 
                         })}
                     </p>
                 </div>
             </div>
-            
             <div className="mt-3 flex items-center text-xs text-indigo-600 hover:text-indigo-800">
                 <span>Ver detalles</span>
                 <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { ExpenseDetailsPage } from '../pages/ExpenseDetailsPage';
-import { GoalsPage } from '../pages/GoalsPage';
 import { ProtectedRoute } from './ProtectedRoute';
 import { NavBar } from '../components/NavBar';
 
@@ -46,18 +45,7 @@ export const router = createBrowserRouter([
                 <Layout>
                     <ExpenseDetailsPage />
                 </Layout>
-            </ProtectedRoute>
-        )
-    },
-    {
-        path: '/goals',
-        element: (
-            <ProtectedRoute>
-                <Layout>
-                    <GoalsPage />
-                </Layout>
-            </ProtectedRoute>
-        )
+            </ProtectedRoute>        )
     },
     {
         path: '*',

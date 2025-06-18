@@ -4,7 +4,6 @@ import { getExpensesSummary, getExpenseCategories } from '../utils/api';
 import { ExpenseSummaryCard } from '../components/ExpenseSummaryCard';
 import { MonthSelector } from '../components/MonthSelector';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-
 export const DashboardPage: React.FC = () => {
     const {
         summary,
@@ -15,20 +14,17 @@ export const DashboardPage: React.FC = () => {
         setCategories,
         setCurrentDate
     } = useExpenseStore();
-    
-    const [loading, setLoading] = useState(false);
+      const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const [showCategories, setShowCategories] = useState(false);
     const loadData = async (year: number, month: number) => {
         setLoading(true);
         setError('');
-        
         try {
             const [summaryData, categoriesData] = await Promise.all([
                 getExpensesSummary(year, month),
                 categories.length === 0 ? getExpenseCategories() : Promise.resolve(categories)
             ]);
-            
             setSummary(summaryData);
             if (categories.length === 0) {
                 setCategories(categoriesData);
@@ -40,26 +36,18 @@ export const DashboardPage: React.FC = () => {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         loadData(currentYear, currentMonth);
     }, [currentYear, currentMonth]);
-
     const handleMonthChange = (year: number, month: number) => {
         setCurrentDate(year, month);
-    };
-
-    const totalExpenses = summary.reduce((total, item) => total + item.totalAmount, 0);
-    const totalTransactions = summary.reduce((total, item) => total + item.count, 0);
-
+    };    const totalExpenses = summary.reduce((total, item) => total + item.totalAmount, 0);
     const monthNames = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
-
     return (
         <div className="space-y-6">
-            {/* Header */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
@@ -67,17 +55,49 @@ export const DashboardPage: React.FC = () => {
                         <p className="text-gray-600">
                             Resumen de gastos - {monthNames[currentMonth - 1]} {currentYear}
                         </p>
-                    </div>
-                    <MonthSelector
-                        currentYear={currentYear}
-                        currentMonth={currentMonth}
-                        onMonthChange={handleMonthChange}
-                    />
-                </div>
+                    </div>                    <div className="flex items-center gap-3">
+                        <MonthSelector
+                            currentYear={currentYear}
+                            currentMonth={currentMonth}
+                            onMonthChange={handleMonthChange}
+                        />
+                        <button
+                            onClick={() => setShowCategories(!showCategories)}
+                            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                        >
+                            {showCategories ? 'Ocultar Categorías' : 'Ver Categorías'}
+                        </button>
+                    </div>                </div>
             </div>
-
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {showCategories && (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-semibold text-gray-900">Todas las Categorías Disponibles</h2>
+                        <span className="text-sm text-gray-500">
+                            {categories.length} categoría{categories.length !== 1 ? 's' : ''}
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {categories.map((category) => (
+                            <div
+                                key={category.id}
+                                className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors"
+                            >
+                                <div className="w-2 h-2 bg-indigo-500 rounded-full mr-3"></div>
+                                <span className="text-sm font-medium text-gray-700">
+                                    {category.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    {categories.length === 0 && (
+                        <div className="text-center py-8">
+                            <p className="text-gray-500">No hay categorías disponibles</p>
+                        </div>
+                    )}
+                </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center">
                         <div className="p-2 bg-blue-100 rounded-lg">
@@ -93,21 +113,6 @@ export const DashboardPage: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div className="flex items-center">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-600">Transacciones</p>
-                            <p className="text-2xl font-bold text-gray-900">{totalTransactions.toLocaleString('es-PE')}</p>
-                        </div>
-                    </div>
-                </div>
-
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center">
                         <div className="p-2 bg-purple-100 rounded-lg">
@@ -122,8 +127,6 @@ export const DashboardPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Error Message */}
             {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex">
@@ -142,29 +145,21 @@ export const DashboardPage: React.FC = () => {
                     </div>
                 </div>
             )}
-
-            {/* Loading State */}
             {loading && <LoadingSpinner />}
-
-            {/* Expense Categories */}
             {!loading && summary.length > 0 && (
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-6">Gastos por Categoría</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {summary.map((item) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">                        {summary.map((item, index) => (
                             <ExpenseSummaryCard
-                                key={item.categoryId}
+                                key={`expense-summary-${item.categoryId || 'no-id'}-${index}`}
                                 summary={item}
                                 onClick={() => {
-                                    // Navigation will be handled by the ExpenseSummaryCard component
                                 }}
                             />
                         ))}
                     </div>
                 </div>
             )}
-
-            {/* Empty State */}
             {!loading && summary.length === 0 && !error && (
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
