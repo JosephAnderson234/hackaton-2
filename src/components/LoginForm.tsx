@@ -32,6 +32,7 @@ export default function LoginForm() {
             setError("");
             navigate("/dashboard"); // Redirect to home page after successful login
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         catch (err: any) {
             setError(err.message || "Error al iniciar sesión");
             setSuccessMessage(""); // Clear success message on error	

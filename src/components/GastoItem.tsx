@@ -1,7 +1,7 @@
-import type { Gasto } from "@utils/gastos";
+import type { ExpenseSummary } from "@/types/expenseType"
 
 interface GastoItemProps {
-  gasto: Gasto;
+  gasto: ExpenseSummary;
   seleccionado: boolean;
   onSeleccionar: (id: number) => void;
 }
@@ -17,15 +17,15 @@ export default function GastoItem({ gasto, seleccionado, onSeleccionar }: GastoI
           type="radio"
           name="gastoSeleccionado"
           checked={seleccionado}
-          onChange={() => onSeleccionar(gasto.id)}
+          onClick={() => onSeleccionar(gasto.id)}
           className="accent-green-500 w-5 h-5"
         />
         <div>
-          <p className="text-gray-900 font-semibold">{gasto.empresa}</p>
-          <p className="text-xs text-gray-500">{gasto.fecha}</p>
+          <p className="text-gray-900 font-semibold">{gasto.expenseCategory.name}</p>
+          <p className="text-xs text-gray-500"> {gasto.year}- {gasto.month}</p>
         </div>
       </div>
-      <p className="text-green-600 font-bold">S/. {gasto.monto.toFixed(2)}</p>
+      <p className="text-green-600 font-bold">S/. {gasto.amount.toFixed(2)}</p>
     </li>
   );
 }

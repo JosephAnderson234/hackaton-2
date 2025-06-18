@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { Gasto } from "@utils/gastos";
-import { gastosIniciales } from "@utils/gastos";
 import GastosHeader from "./GastosHeader";
 import GastoItem from "./GastoItem";
+import useAllExpenses from "@hooks/useAllExpenses";
+import { LoadingDots } from "./PreLoading";
 
 export default function GastosList() {
-  const [gastos, setGastos] = useState<Gasto[]>(gastosIniciales);
+  const {gastos, loading, error} = useAllExpenses();
   const [seleccionado, setSeleccionado] = useState<number | null>(null);
 
   const seleccionar = (id: number) => {
@@ -13,9 +13,7 @@ export default function GastosList() {
   };
 
   const eliminarSeleccionado = () => {
-    if (seleccionado === null) return;
-    setGastos(gastos.filter(g => g.id !== seleccionado));
-    setSeleccionado(null);
+    console.log("Eliminar gasto con ID:", seleccionado);
   };
 
   const crearNuevoGasto = () => {
@@ -30,7 +28,8 @@ export default function GastosList() {
         eliminarHabilitado={seleccionado !== null}
       />
       <ul className="space-y-3">
-        {gastos.map((gasto) => (
+        {error && <p className="text-red-500 text-center">Error al cargar los gastos: {error}</p>}
+        {loading ? <LoadingDots/> : gastos.map((gasto) => (
           <GastoItem
             key={gasto.id}
             gasto={gasto}
