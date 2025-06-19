@@ -20,7 +20,7 @@ export default function ExpenseDetail() {
         <NavLink to="/dashboard" className="bg-green-500 text-white p-1.5 rounded-xl hover:bg-green-600 transition-all duration-300"  > ⬅️ Regresar </NavLink>
       </div>
       <h2 className="text-xl font-bold text-gray-800">
-        Gastos en {categoryName} — {MONTHS_ARRAY[month]}/{year}
+        Gastos en {categoryName} — {MONTHS_ARRAY[month-1]}/{year}
       </h2>
       <ExpenseActions />
       <ExpenseSummary expenses={expenses} />
