@@ -7,7 +7,9 @@ import type {
     CreateExpenseRequest,
     CreateExpenseWithCategoryRequest
 } from "../types/expenseTypes";
-const BACKEND_URL = import.meta.env.DEV ? "/api" : "http://198.211.105.95:8080";
+const BACKEND_URL = import.meta.env.VITE_DEV || "http://localhost:8080";
+//const BACKEND_URL = "http://localhost:8080";
+
 const apiClient = axios.create({
     baseURL: BACKEND_URL,
     timeout: 30000,
