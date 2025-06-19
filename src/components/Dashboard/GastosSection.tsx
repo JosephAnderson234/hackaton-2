@@ -24,10 +24,9 @@ export default function GastosSection() {
 
   return (
     <div className="flex flex-col md:flex-row gap-6 mt-8">
-      <div className="w-11/12 md:w-1/2 h-  mx-auto bg-white p-6 rounded-2xl shadow-lg">
+      <div className="w-11/12 md:w-1/2 h-full mx-auto bg-white p-6 rounded-2xl shadow-lg">
         <div>
           <h2 className="text-2xl p-2 font-bold text-gray-800 text-center">
-
             Resumen de gastos de este mes y año:
           </h2>
           <div>
@@ -47,7 +46,7 @@ export default function GastosSection() {
           <h2 className="text-2xl p-2 font-bold text-gray-800">🧾 Mis Gastos</h2>
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-green-600 transition-colors">
             Crear Nuevo Gasto
           </button>
           {!loading && <GastosFilter

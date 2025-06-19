@@ -4,11 +4,12 @@ import ExpenseSummary from "@components/ExpenseDetails/ExpenseSummary";
 import ExpenseActions from "@components/ExpenseDetails/ExpenseAction";
 import { NavLink } from "react-router-dom";
 import { MONTHS_ARRAY } from "@utils/constants";
+import { LoadingDots } from "@components/PreLoading";
 
 export default function ExpenseDetail() {
   const { year, month, expenses, loading, error, categoryName } = useExpenseParams();
 
-  if (loading) return <p className="text-gray-600">Cargando gastos...</p>;
+  if (loading) return <div className="w-full"><LoadingDots/></div>;
   if (error) return <p className="text-red-600 font-medium">Error: {error}</p>;
   if (expenses.length === 0)
     return <p className="text-gray-500">No hay gastos registrados para esta categoría en este mes.</p>;

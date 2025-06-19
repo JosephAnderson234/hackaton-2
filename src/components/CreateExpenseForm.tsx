@@ -98,8 +98,8 @@ const CreateExpenseForm = ({ onSuccess }: Props) => {
                 type="submit"
                 disabled={isLoading || !!errorAddExpenses || !!errorCategories}
                 className={`w-full py-2 px-4 text-white font-medium rounded-lg transition-colors duration-200 ${isLoading || !!errorAddExpenses || !!errorCategories
-                        ? 'bg-blue-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700'
+                        ? 'bg-green-400 cursor-not-allowed'
+                        : 'bg-green-600 hover:bg-green-700 hover:cursor-pointer'
                     }`}
             >
                 {isLoading ? 'Añadiendo...' : 'Añadir Gasto'}
