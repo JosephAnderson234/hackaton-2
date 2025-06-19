@@ -1,4 +1,4 @@
-import type { ExpenseGeneralData, Category, Expense, ExpenseSummerized, CurrentExpenseData } from "@/types/expenseType"
+import type { ExpenseGeneralData, Category, Expense, ExpenseSummerized } from "@/types/expenseType"
 import { getAllExpenses, getExpenseCategories, getExpensesByCategory } from "@utils/api"
 import useGeneralExpenseStore from "@utils/generalExpenseStore";
 import useCurrentDataStore from "@utils/useCurrentData";

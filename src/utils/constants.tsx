@@ -55,3 +55,5 @@ export const YEARS = [
     { name: "2025", value: 2025 },
     { name: "2024", value: 2024 },
 ];
+
+export const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6347', '#6A5ACD', '#20B2AA', '#FF4500', '#2E8B57', '#FFD700'];

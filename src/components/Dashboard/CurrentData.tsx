@@ -4,7 +4,7 @@ import useCurrentDataStore from "@utils/useCurrentData";
 const CurrentData = () => {
     const { currentData } = useCurrentDataStore();
     return (
-        <div>
+        <div className="mx-auto bg-white p-6 rounded-2xl shadow-lg">
             <h2 className="text-2xl p-2 font-bold text-gray-800 text-center">
                 Resumen de gastos de este mes y año:
             </h2>

@@ -10,7 +10,7 @@ export default function ExpenseDetail() {
   const { year, month, expenses, loading, error, categoryName } = useExpenseParams();
 
   if (loading) return <div className="w-full"><LoadingDots/></div>;
-  if (error) return <p className="text-red-600 font-medium">Error: {error}</p>;
+  if (error) return <div className="text-red-600 font-medium text flex w-full justify-center ">Error: {error}</div>;
   if (expenses.length === 0)
     return <p className="text-gray-500">No hay gastos registrados para esta categoría en este mes.</p>;
 

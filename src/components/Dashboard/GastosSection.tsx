@@ -7,7 +7,7 @@ import { Modal } from "@components/Modals";
 import { useState } from "react";
 import CreateExpenseForm from "@components/CreateExpenseForm";
 import CurrentData from "./CurrentData";
-import { PieChartStadistic } from "./GraphStadistic";
+import Stadistic from "./Stadistic";
 
 export default function GastosSection() {
   const { summerizedGastos, loading, error, yearFilter, monthFilter, setMonthFilter, setYearFilter } = useAllExpenses();
@@ -26,9 +26,9 @@ export default function GastosSection() {
   return (
     <div className="flex flex-col md:flex-row gap-6 mt-8">
       
-      <div className="w-11/12 md:w-1/2 h-full mx-auto bg-white p-6 rounded-2xl shadow-lg">
+      <div className="w-11/12 md:w-1/2 h-full flex flex-col gap-4">
         <CurrentData />
-        <PieChartStadistic />
+        <Stadistic />
       </div>
 
 
