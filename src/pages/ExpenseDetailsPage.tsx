@@ -223,11 +223,12 @@ export const ExpenseDetailsPage: React.FC = () => {    const { categoryId } = us
                                             </div>
                                         </div>
                                         <p className="text-sm text-gray-500 mt-1">
-                                            {new Date(expense.date).toLocaleDateString('es-PE', {
+                                            {/* {new Date(expense.date).toLocaleDateString('es-PE', {
                                                 year: 'numeric',
                                                 month: 'long',
                                                 day: 'numeric'
-                                            })}
+                                            })} */}
+                                            {expense.date}
                                         </p>
                                     </div>
                                 </div>
