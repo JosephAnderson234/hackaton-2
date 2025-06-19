@@ -1,6 +1,6 @@
 import LoginForm from "@components/LoginForm";
-//import imgR from "@assets/mywallet.png";
-import imgR from "@assets/barca.png"
+import imgR from "@assets/mywallet.png";
+//import imgR from "@assets/barca.png"
 
 export default function LoginPage() {
 

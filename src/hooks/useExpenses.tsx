@@ -144,7 +144,10 @@ export function useExpenseParams() {
             }
 
             try {
-                const data = await getExpensesByCategory(session, numericYear, numericMonth, numericCategoryId);
+                const data:Expense[] = await getExpensesByCategory(session, numericYear, numericMonth, numericCategoryId);
+                //orderByDate
+                data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
                 setExpenses(data);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
