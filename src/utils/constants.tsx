@@ -49,6 +49,8 @@ export const MONTHS = [
     }
 ]
 
+export const MONTHS_ARRAY = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+
 export const YEARS = [
     { name: "2025", value: 2025 },
     { name: "2024", value: 2024 },

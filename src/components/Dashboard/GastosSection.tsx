@@ -1,4 +1,5 @@
 import GastosFilter from "./GastosFilter";
+import { MONTHS_ARRAY } from "@utils/constants";
 import { useNavigate } from "react-router-dom";
 import GastoItem from "./GastoItem";
 import { useAllExpenses } from "@hooks/useExpenses";
@@ -9,7 +10,7 @@ import CreateExpenseForm from "@components/CreateExpenseForm";
 
 export default function GastosSection() {
   const { summerizedGastos, loading, error, yearFilter, monthFilter, setMonthFilter, setYearFilter, currentData } = useAllExpenses();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -60,10 +61,10 @@ export default function GastosSection() {
             Resumen de gastos de este mes y año:
           </h2>
           <div>
-            {summerizedGastos.length !== 0 && !loading && currentData ? (
+            {!error && !loading && currentData ? (
               <div className="text-center mt-4">
                 <p className="text-lg font-semibold">Total Gastos: ${currentData.amount.toFixed(2)}</p>
-                <p className="text-sm text-gray-500">Mes: {currentData.month}, Año: {currentData.year}</p>
+                <p className="text-sm text-gray-500">Mes: { MONTHS_ARRAY[currentData.month-1] }, Año: {currentData.year}</p>
               </div>
             ) : (
               <p className="text-gray-500 text-center">No hay datos disponibles para el mes y año actual.</p>

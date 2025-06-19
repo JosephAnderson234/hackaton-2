@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { LoginRequest, RegisterRequest } from "@/types/authTypes";
 import type { CreateExpenese } from "@/types/expenseType";
-const BACKEND_URL = import.meta.env.VITE_API_BACKEND || "http://localhost:3000";
+const BACKEND_URL = import.meta.env.VITE_API_BACKEND2 || "http://localhost:3000";
 
 
 export const login = async (loginRequest: LoginRequest) => {

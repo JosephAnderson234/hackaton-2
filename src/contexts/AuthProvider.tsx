@@ -7,7 +7,8 @@ async function loginHandler(
     setSession: (value: string) => void,
 ) {
     const response = await login(loginRequest)
-    setSession(response.data.result.token);
+    console.log(response)
+    setSession(response.data.data.token);
     /* const response = await login(loginRequest);
     setSession(response.data.token); */
 }

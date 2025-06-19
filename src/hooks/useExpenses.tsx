@@ -62,6 +62,8 @@ export const useAllExpenses = () => {
                     throw new Error("No token found");
                 }
                 const response = await getAllExpenses(session);
+                //console.log("Fetched expenses:", response);
+                getCurrentData(response);
                 setGastos(response);
             } catch (err) {
                 console.error("Error fetching expenses:", err);
@@ -71,7 +73,7 @@ export const useAllExpenses = () => {
             }
         };
 
-        fetchData().finally(() => getCurrentData(gastos));
+        fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -144,6 +146,7 @@ export function useExpenseParams() {
             try {
                 const data = await getExpensesByCategory(session, numericYear, numericMonth, numericCategoryId);
                 setExpenses(data);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
                 setError(err?.message || "Error desconocido");
             } finally {
