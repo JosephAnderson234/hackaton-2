@@ -6,11 +6,11 @@ async function loginHandler(
     loginRequest: LoginRequest,
     setSession: (value: string) => void,
 ) {
-    const response = await login(loginRequest)
-    console.log(response)
-    setSession(response.data.data.token);
-    /* const response = await login(loginRequest);
-    setSession(response.data.token); */
+    //const response = await login(loginRequest)
+    //console.log(response)
+    //setSession(response.data.data.token);
+    const response = await login(loginRequest);
+    setSession(response.data.token); 
 }
 
 async function signupHandler(
