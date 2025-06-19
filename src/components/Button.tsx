@@ -4,6 +4,7 @@ interface ButtonProps {
 	to: string;
 	message: string;
 	className?: string;
+	onClick?: () => void;
 }
 
 export default function Button(props: ButtonProps) {
@@ -18,8 +19,10 @@ export default function Button(props: ButtonProps) {
 	} shadow-md border border-green-700`
 
 	function handleClick() {
-		if (!isActive) {
+		if (!props.onClick) {
 		navigate(props.to);
+		} else {
+			props.onClick();
 		}
 	}
 

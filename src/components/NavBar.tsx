@@ -1,6 +1,13 @@
 import Button from "@components/Button";
+import { useLocation } from "react-router-dom";
+import useAuth from "@hooks/useAuthContext";
 
 const Navbar = () => {
+
+    const location = useLocation();
+    const { session, logout } = useAuth();
+    const isLoginPage = location.pathname === "/auth/login";
+    const isRegisterPage = location.pathname === "/auth/register";
     return (
         <nav className="bg-gray-800 p-4">
             <div className="container mx-auto flex justify-between items-center">
@@ -17,16 +24,25 @@ const Navbar = () => {
                     <span className="text-white text-lg font-bold">MyWallet</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Button
-                        message="Iniciar Sesión"
-                        to="/auth/login"
-                        className="px-3 py-1 text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
-                    />
-                    <Button
-                        message="Registrarse"
-                        to="/auth/register"
-                        className="px-3 py-1 text-sm font-medium bg-green-600 hover:bg-green-500 text-white rounded transition-colors"
-                    />
+                    {!session && (
+                        <>
+                            {isRegisterPage && (
+                                <Button
+                                    message="Iniciar Sesión"
+                                    to="/auth/login"
+                                    className="px-3 py-1 text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
+                                />
+                            )}
+                            {isLoginPage &&(
+                                <Button
+                                    message="Registrarse"
+                                    to="/auth/register"
+                                    className="px-3 py-1 text-sm font-medium bg-green-600 hover:bg-green-500 text-white rounded transition-colors"
+                                />
+                            )}
+                        </>
+                    )}
+                    {session && <Button message="Log Out" to="/auth/login" onClick={logout}/>}
                 </div>
             </div>
         </nav>

@@ -1,12 +1,12 @@
 import LoginForm from "@components/LoginForm";
 import imgR from "@assets/mywallet.png";
-
+//import imgR from "@assets/barca.png"
 
 export default function LoginPage() {
 
 	return (
 		<main className="px-10 min-h-screen flex flex-col justify-center bg-gray-50">
-			<article className="flex justify-center items-center gap-12">
+			<article className="flex flex-col md:flex-row justify-center items-center gap-12">
 				<section className="flex flex-col items-center justify-center p-10 rounded-2xl shadow-lg max-w-sm w-full bg-white">
 					<img
 						src={imgR}
