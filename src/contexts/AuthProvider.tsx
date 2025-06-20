@@ -11,6 +11,7 @@ async function loginHandler(
     //setSession(response.data.data.token);
     const response = await login(loginRequest);
     setSession(response.data.result.token);
+
 }
 
 async function signupHandler(
