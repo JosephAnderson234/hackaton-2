@@ -9,8 +9,8 @@ import useAuth from "./useAuthContext"
 
 export const useAllExpenses = () => {
     const { setGastos, gastos } = useGeneralExpenseStore();
-    const [yearFilter, setYearFilter] = useState<number | null>(null)
-    const [monthFilter, setMonthFilter] = useState<number | null>(null)
+    const [yearFilter, setYearFilter] = useState<number>(new Date().getFullYear())
+    const [monthFilter, setMonthFilter] = useState<number>(new Date().getMonth() + 1) // Months are 0-indexed in JavaScript, so we add 1 to get the correct month number
     const [summerizedGastos, setSummarizedGastos] = useState<ExpenseSummerized[]>([])
     const { session } = useAuth();
     const [loading, setLoading] = useState<boolean>(true)
