@@ -11,7 +11,7 @@ export default function ExpenseList({ expenses }: Props) {
   const { selectedId, setSelectedId } = useSelectedExpense();
 
   return (
-    <ul className="grid divide-gray-200 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <ul className="w-11/12 md:w-5/6 mx-auto grid divide-gray-200 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {expenses.map((expense) => (
         
         <li

@@ -1,4 +1,3 @@
-import { Plus, Trash2 } from "lucide-react";
 import { MONTHS, YEARS } from "@utils/constants";
 
 interface GastosFilterProps {
@@ -17,7 +16,7 @@ export default function GastosFilter({ setYear, setMonth, year, month }: GastosF
         onChange={(e) => setYear(Number(e.target.value))}
         className="border p-1 rounded"
       >
-        <option value="">Seleccionar año</option>
+        <option value="">Todos los años</option>
         {YEARS.map((y, idx) => (
           <option key={idx} value={y.value}>
             {y.name}
@@ -29,7 +28,7 @@ export default function GastosFilter({ setYear, setMonth, year, month }: GastosF
         onChange={(e) => setMonth(Number(e.target.value))}
         className="border p-1 rounded"
       >
-        <option value="">Seleccionar mes</option>
+        <option value="">Todos los meses</option>
         {MONTHS.map((m, idx) => (
           <option key={idx} value={m.value}>
             {m.name}

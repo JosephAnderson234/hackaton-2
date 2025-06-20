@@ -1,33 +1,22 @@
-import type { ExpenseGeneralData, Category, Expense, ExpenseSummerized, CurrentExpenseData } from "@/types/expenseType"
+import type { ExpenseGeneralData, Category, Expense, ExpenseSummerized } from "@/types/expenseType"
 import { getAllExpenses, getExpenseCategories, getExpensesByCategory } from "@utils/api"
+import useGeneralExpenseStore from "@utils/generalExpenseStore";
+import useCurrentDataStore from "@utils/useCurrentData";
 import { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom';
 import useAuth from "./useAuthContext"
 
 
 export const useAllExpenses = () => {
-    const [gastos, setGastos] = useState<ExpenseGeneralData[]>([])
-    const [yearFilter, setYearFilter] = useState<number | null>(null)
-    const [monthFilter, setMonthFilter] = useState<number | null>(null)
+    const { setGastos, gastos } = useGeneralExpenseStore();
+    const [yearFilter, setYearFilter] = useState<number>(new Date().getFullYear())
+    const [monthFilter, setMonthFilter] = useState<number>(new Date().getMonth() + 1) // Months are 0-indexed in JavaScript, so we add 1 to get the correct month number
     const [summerizedGastos, setSummarizedGastos] = useState<ExpenseSummerized[]>([])
     const { session } = useAuth();
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
-    const [currentData, setCurrentData] = useState<CurrentExpenseData>();
+    const { getCurrentData } = useCurrentDataStore();
 
-    const getCurrentData = (gastos: ExpenseGeneralData[]) => {
-        if (gastos.length === 0) return;
-        //sum of all the amounts of the current month and year
-        const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed in JS
-        const currentYear = new Date().getFullYear();
-        const currentGastos = gastos.filter(gasto => gasto.month === currentMonth && gasto.year === currentYear);
-        const totalAmount = currentGastos.reduce((acc, gasto) => acc + gasto.amount, 0);
-        setCurrentData({
-            month: currentMonth,
-            year: currentYear,
-            amount: totalAmount,
-        });
-    }
 
     const filterGastos = (gastos: ExpenseGeneralData[]) => {
         return gastos.filter(gasto => {
@@ -72,7 +61,6 @@ export const useAllExpenses = () => {
                 setLoading(false);
             }
         };
-
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -85,7 +73,7 @@ export const useAllExpenses = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gastos, yearFilter, monthFilter]);
 
-    return { summerizedGastos, loading, error, setYearFilter, setMonthFilter, yearFilter, monthFilter, currentData };
+    return { summerizedGastos, loading, error, setYearFilter, setMonthFilter, yearFilter, monthFilter };
 }
 
 export const useCategioriesList = () => {

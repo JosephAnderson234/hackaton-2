@@ -1,4 +1,9 @@
 
+# Importante
+
+Crear el archivo `.env` para completar la información del hackathon.
+Debe tener información como en el `.env.example`
+
 # 💻 Hackathon: Ahorrista Web App
 
 ## 🕑 Duración: 2 horas  

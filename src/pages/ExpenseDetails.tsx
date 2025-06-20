@@ -10,7 +10,7 @@ export default function ExpenseDetail() {
   const { year, month, expenses, loading, error, categoryName } = useExpenseParams();
 
   if (loading) return <div className="w-full"><LoadingDots/></div>;
-  if (error) return <p className="text-red-600 font-medium">Error: {error}</p>;
+  if (error) return <div className="text-red-600 font-medium text flex w-full justify-center ">Error: {error}</div>;
   if (expenses.length === 0)
     return <p className="text-gray-500">No hay gastos registrados para esta categoría en este mes.</p>;
 
@@ -20,7 +20,7 @@ export default function ExpenseDetail() {
         <NavLink to="/dashboard" className="bg-green-500 text-white p-1.5 rounded-xl hover:bg-green-600 transition-all duration-300"  > ⬅️ Regresar </NavLink>
       </div>
       <h2 className="text-xl font-bold text-gray-800">
-        Gastos en {categoryName} — {MONTHS_ARRAY[month]}/{year}
+        Gastos en {categoryName} — {MONTHS_ARRAY[month-1]}/{year}
       </h2>
       <ExpenseActions />
       <ExpenseSummary expenses={expenses} />

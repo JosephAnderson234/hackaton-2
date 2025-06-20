@@ -10,7 +10,8 @@ async function loginHandler(
     //console.log(response)
     //setSession(response.data.data.token);
     const response = await login(loginRequest);
-    setSession(response.data.token); 
+    setSession(response.data.result.token);
+
 }
 
 async function signupHandler(
@@ -24,7 +25,7 @@ async function signupHandler(
 const AuthProvider = (props: { children: React.ReactNode }) => {
     const token = useUserStore((state) => state.token);
     const setToken = useUserStore((state) => state.setToken);
-    
+
     return (
         <AuthContext.Provider
             value={{
